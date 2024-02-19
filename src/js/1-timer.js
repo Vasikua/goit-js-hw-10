@@ -3,12 +3,15 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
-
+   const showdays = document.querySelector('[data-days]');
+   const showhours = document.querySelector('[data-hours]');
+   const showminutes = document.querySelector('[data-minutes]');
+   const showseconds = document.querySelector('[data-seconds]');
 
 const startBtn = document.querySelector('[data-start]');
 startBtn.disabled = true;
 
-let userSelectedDate; 
+let delta = 0; 
 
 const options = {
         altInput: true,
@@ -25,20 +28,11 @@ const options = {
               
               if (userDate > startDate) {
                           startBtn.disabled = false;
-                            userSelectedDate = userDate;
-                            const time = userDate - startDate;
-                            const { days, hours, minutes, seconds } = convertMs(time);
-                            
-                              const showdays = document.querySelector('[data-days]');
+                            delta = userDate - startDate;
+                            const { days, hours, minutes, seconds } = convertMs(delta);
                               showdays.textContent = days;
-
-                              const showhours = document.querySelector('[data-hours]');
                               showhours.textContent = hours;
-
-                              const showminutes = document.querySelector('[data-minutes]');
                               showminutes.textContent = minutes;
-
-                              const showseconds = document.querySelector('[data-seconds]');
                               showseconds.textContent = seconds;
               } else {             
                       iziToast.error({
@@ -76,93 +70,31 @@ function convertMs(time) {
 }
 
 
+class Timer {
+  
+  constructor(onTick) {
+    this.onTick = onTick;
+    this.interval = null;
+   }
 
-startBtn.addEventListener('click', startTimer);
-
-function startTimer() {
+  start() { 
+      this.interval = setInterval(() => {
+        const time = convertMs(delta);
+        this.onTick(time);
+      }, 1000)
+     
+  }
   
 }
 
+const timer = new Timer({onTick: updateClockface})
 
+function updateClockface({ days, hours, minutes, seconds }) {
+  showdays.textContent = `${days}`;
+  showhours.textContent = `${hours}`;
+  showminutes.textContent = `${minutes}`;
+  showseconds.textContent = `${seconds}`;
+}
 
-
-
-// class Timer {
-  
-//   constructor(onTick) {
-//     this.onTick = onTick;
-//     this.interval = null;
-//    }
-
-//   start() { 
-//     const startTime = Date.now();
-//     this.interval = setInterval((){
-//       const curentTime = Date.now();
-//       const delta = curentTime - startTime;
-//       const time = this.getTimeCompounents(delta);
-
-//       this.onTick(time);
-
-//     }, 1000)
-     
-//   }
-//   // add 0 on begin if onli one number 
-//   Pad(value) {
-//     return String(value).padStart(2, '0'); 
-//   }
-
-// }
-
-
-// const timer = new Timer({
-//   onTick: updateClockface
-// })
-
-// function updateClockface({days, hours, mins,secs }) {
-//   updateClockface.textContent = `${days}, ${hours}, ${mins},${secs}`
-// }
-
-
-// getTimeCompounents(time){
-//   const hours = this.pad(
-//     Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-//   );
-//   const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-//   const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
-//   return { hours, mins, secs };    
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+startBtn.addEventListener('click',  timer.start);
 
