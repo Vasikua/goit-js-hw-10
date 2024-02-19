@@ -7,7 +7,7 @@ import "izitoast/dist/css/iziToast.min.css";
    const showhours = document.querySelector('[data-hours]');
    const showminutes = document.querySelector('[data-minutes]');
    const showseconds = document.querySelector('[data-seconds]');
-
+const inputfield = document.querySelector('#datetime-picker')
 const startBtn = document.querySelector('[data-start]');
 startBtn.disabled = true;
 
@@ -56,15 +56,16 @@ function convertMs(time) {
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
+  
 
   // Remaining days
-  const days = Math.floor(time / day);
+  const days = timer.pad( Math.floor(time / day));
   // Remaining hours
-  const hours = Math.floor((time % day) / hour);
+  const hours = timer.pad(Math.floor((time % day) / hour));
   // Remaining minutes
-  const minutes = Math.floor(((time % day) % hour) / minute);
+  const minutes = timer.pad(Math.floor(((time % day) % hour) / minute));
   // Remaining seconds
-  const seconds = Math.floor((((time % day) % hour) % minute) / second);
+  const seconds = timer.pad(Math.floor((((time % day) % hour) % minute) / second));
 
   return { days, hours, minutes, seconds };
 }
@@ -84,6 +85,10 @@ class Timer {
       }, 1000)
      
   }
+   pad(value) {
+    return String(value).padStart(2, "0");
+  }
+  
 
 }
 
@@ -98,5 +103,9 @@ function updateClockface({ days, hours, minutes, seconds }) {
   showseconds.textContent = `${seconds}`;
 }
 
-startBtn.addEventListener('click',  timer.start.bind(timer));
+startBtn.addEventListener('click', () => {
+  timer.start.bind(timer);
+  startBtn.disabled = true;
+  inputfield.disalbe = true;
+})
 
