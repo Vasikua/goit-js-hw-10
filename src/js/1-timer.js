@@ -84,10 +84,12 @@ class Timer {
       }, 1000)
      
   }
-  
+
 }
 
-const timer = new Timer({onTick: updateClockface})
+const timer = new Timer({
+  onTick: updateClockface,
+})
 
 function updateClockface({ days, hours, minutes, seconds }) {
   showdays.textContent = `${days}`;
@@ -96,5 +98,5 @@ function updateClockface({ days, hours, minutes, seconds }) {
   showseconds.textContent = `${seconds}`;
 }
 
-startBtn.addEventListener('click',  timer.start);
+startBtn.addEventListener('click',  timer.start.bind(timer));
 
