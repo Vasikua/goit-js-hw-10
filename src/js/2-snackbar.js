@@ -1,22 +1,44 @@
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-<form class="form">
-  <label>
-    Delay (ms)
-    <input type="number" name="delay" required />
-  </label>
 
-  <fieldset>
-    <legend>State</legend>
-    <label>
-      <input type="radio" name="state" value="fulfilled" required />
-      Fulfilled
-    </label>
-    <label>
-      <input type="radio" name="state" value="rejected" required />
-      Rejected
-    </label>
-  </fieldset>
+const form = document.querySelector('.form');
 
-  <button type="submit">Create notification</button>
-</form>
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const delayTime = form.delay.value;
+    const radio = form.state.value;
+
+    const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (radio === 'fulfilled') {
+                resolve(iziToast.error({
+                    fontSize: 'large',
+                    close: false,
+                    position: 'topRight',
+                    messageColor: 'white',
+                    timeout: 2000,
+                    backgroundColor: 'green',
+                    message: (`✅ Fulfilled promise in ${delayTime}ms`)
+                }));
+            } else {
+                reject(iziToast.error({
+                    fontSize: 'large',
+                    close: false,
+                    position: 'topRight',
+                    messageColor: 'white',
+                    timeout: 2000,
+                    backgroundColor: 'red',
+                    message: (`❌ Rejected promise in ${delayTime}ms`)
+                }));
+            
+            }
+        }, delayTime)
+    })
+
+    promise.then(value => {
+        console.log(value);
+    })
+        .catch(error => {
+            console.error(error);
+        });
+});

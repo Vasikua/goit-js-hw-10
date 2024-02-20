@@ -11,6 +11,12 @@ const inputfield = document.querySelector('#datetime-picker')
 const startBtn = document.querySelector('[data-start]');
 startBtn.disabled = true;
 
+startBtn.addEventListener('click', () => {
+  timer.start();
+  startBtn.disabled = true;
+  inputfield.disalbe = true;
+})
+
 let delta = 0; 
 
 const options = {
@@ -103,9 +109,5 @@ function updateClockface({ days, hours, minutes, seconds }) {
   showseconds.textContent = `${seconds}`;
 }
 
-startBtn.addEventListener('click', () => {
-  timer.start.bind(timer);
-  startBtn.disabled = true;
-  inputfield.disalbe = true;
-})
+
 
