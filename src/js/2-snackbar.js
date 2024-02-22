@@ -8,34 +8,34 @@ form.addEventListener('submit', (event) => {
     const delayTime = form.delay.value;
     const radioBtn = form.state.value;
 
-   // const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
         setTimeout(() => {
-            radioBtn === 'fulfilled'?
-                Promise.resolve(iziToast.error({
-                    fontSize: 'large',
-                    close: false,
-                    position: 'topRight',
-                    messageColor: 'white',
-                    timeout: 2000,
-                    backgroundColor: 'green',
+            const options = {
+                fontSize: 'large',
+                close: false,
+                position: 'topRight',
+                messageColor: 'white',
+                timeout: 2000,
+                    
+            }
+            if (radioBtn === 'fulfilled') {
+                resolve(iziToast.success({
+                    ...options,
                     message: (`✅ Fulfilled promise in ${delayTime}ms`)
-                })) :
-                Promise.reject(iziToast.error({
-                    fontSize: 'large',
-                    close: false,
-                    position: 'topRight',
-                    messageColor: 'white',
-                    timeout: 2000,
-                    backgroundColor: 'red',
+                }))
+            } else {
+                reject(iziToast.error({
+                    ...options,
                     message: (`❌ Rejected promise in ${delayTime}ms`)
                 }));
-        }, delayTime)
+            }
+    }, delayTime)
     })
 
-//     promise.then(value => {
-//         console.log(value);
-//     })
-//         .catch(error => {
-//             console.error(error);
-//   //      });
-// });
+    promise.then(value => {
+        console.log(value);
+    })
+        .catch(error => {
+            console.error(error);
+        });
+});
