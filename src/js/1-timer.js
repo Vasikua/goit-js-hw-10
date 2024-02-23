@@ -22,7 +22,7 @@ let intervalId;
 
 
 const options = {
-  dateFormat: "Y-m-d",
+  defaultDate: null,
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
@@ -69,7 +69,8 @@ function startTimer() {
 
 function timer() {
    
-  if (timeDifference >= 0) {
+  if (timeDifference > 1000) {
+    
     timeDifference -= 1000;
     updateClockface(convertMs(timeDifference))
   
